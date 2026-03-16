@@ -71,11 +71,11 @@ export default function Home() {
     <>
       <section className="relative h-[95vh] min-h-[85vh] items-center overflow-hidden px-6 py-20 lg:px-20">
         <div className="absolute inset-0 z-0">
-          <Image
+          <img
             alt="Minimal spa environment with calming colors and soft textures"
-            fill
+            // fill
             className="h-full w-full object-cover"
-            src="/home-banner-2.jpg"
+            src="https://img.rachatat.com/insecure/rs:fill:1200/plain/https://fe-storage.rachatat.com/home-banner-2.jpg"
             sizes="100vw"
           />
           <div className="absolute inset-0 bg-linear-to-r from-background via-background/40 to-transparent" />

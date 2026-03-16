@@ -181,25 +181,25 @@ function LoginPageContent() {
               </p>
             </div>
 
-            <footer className="mt-20 border-t border-surface-container pt-8">
-              {/* <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-outline">
+            {/* <footer className="mt-20 border-t border-surface-container pt-8">
+              <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-outline">
                 <a href="#" className="transition-colors hover:text-primary">Privacy Policy</a>
                 <a href="#" className="transition-colors hover:text-primary">Terms of Service</a>
                 <a href="#" className="transition-colors hover:text-primary">Contact Us</a>
-              </div> */}
+              </div>
               <p className="mt-4 text-[10px] uppercase tracking-widest text-outline-variant">
                 © 2026 ZenMassage by Pikiwedia
               </p>
-            </footer>
+            </footer> */}
           </div>
         </section>
 
         <section className="relative hidden bg-surface-container lg:col-span-7 lg:block">
           <div className="absolute inset-0 z-0">
-            <Image
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC_TVzgYWyfqUsSWDfL7E8QQ-9tXFl-JocdYDZTpN2e8CdIynkEOCepUokf5a1cYsx_6T0vSZiw_WyCsxbzlm6yFcjTOg-GCE2IupRh6PeaZDbQrYXUViXX29jLWF7viV6dha_J9rLdpeNw7BMYxH5wj76aQQpdP_meecXoa8iYDfB-MObFAH_75APpb1c8Offbb_1D_FmkRk1D-aelWW3CYbij0d2BRU0rQBpvjloLuEtROMwKCjC4SdJ4WemPGGP2Yx1mcD6w7OgO"
+            <img
+              src="https://img.rachatat.com/insecure/plain/https://fe-storage.rachatat.com/auth-image-4.png"
               alt="Luxury Spa Interior"
-              fill
+              // fill
               sizes="58vw"
               className="h-full w-full object-cover brightness-[0.85] grayscale-20"
             />

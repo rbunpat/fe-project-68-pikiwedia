@@ -97,7 +97,7 @@ export async function Navbar() {
             <details className="group relative">
               <summary className="flex list-none cursor-pointer items-center gap-2 rounded-full p-1 transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 [&::-webkit-details-marker]:hidden">
                 <img
-                  src={`https://api.dicebear.com/9.x/lorelei/svg?seed=${profile.data.name}`}
+                  src={`https://img.rachatat.com/insecure/rs:fill:1200/plain/https://api.dicebear.com/9.x/lorelei/png?seed=${profile.data._id}`}
                   alt="User avatar"
                   className="h-10 w-10 rounded-full object-cover"
                 />
