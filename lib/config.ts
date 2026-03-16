@@ -1,0 +1,1 @@
+export const apiBaseUrl = "https://be-project-68-pikiwedia.vercel.app";
