@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
 import getUserProfile from "@/lib/auth/getUserProfile";
 
-
 const navLinks = [
   { href: "/", label: "Home", authRequired: false },
   { href: "/massage-shops", label: "Massage Shops", authRequired: false },
@@ -11,15 +10,15 @@ const navLinks = [
 ];
 
 export async function Navbar() {
-    const session = await getServerSession(authOptions);
-    let profile = null;
+  const session = await getServerSession(authOptions);
+  let profile = null;
 
-    console.log(session);
+  console.log(session);
 
-    if (session) {
-        profile = await getUserProfile(session.user.token);
-        console.log(profile);
-    }
+  if (session) {
+    profile = await getUserProfile(session.user.token);
+    console.log(profile);
+  }
 
   return (
     <nav className="glass-nav sticky top-0 z-50 px-6 py-4 lg:px-20">
@@ -52,19 +51,25 @@ export async function Navbar() {
               </svg>
             </summary>
             <div className="absolute left-0 top-full mt-3 flex w-[min(20rem,calc(100vw-3rem))] flex-col overflow-hidden rounded-3xl bg-surface-container-lowest p-3 shadow-[0_8px_32px_rgb(26_28_24/0.05)]">
-              {navLinks.map((link, index) => (
-                <a key={index}
-                  href={link.href}
-                  className="block rounded-lg px-4 py-2 text-sm text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-primary"
-                >
-                  {link.label}
-                </a>
-
-              ))}
+              {navLinks.map((link, index) => {
+                if (link.authRequired && !session) return null;
+                return (
+                  <Link
+                    key={index}
+                    href={link.href}
+                    className="block rounded-lg px-4 py-2 text-sm text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-primary"
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
           </details>
 
-          <Link href="/" className="font-headline text-2xl font-bold tracking-tight text-primary">
+          <Link
+            href="/"
+            className="font-headline text-2xl font-bold tracking-tight text-primary"
+          >
             ZenMassage
           </Link>
 
@@ -75,11 +80,11 @@ export async function Navbar() {
                 <Link
                   key={index}
                   href={link.href}
-                    className="text-sm font-medium text-on-surface-variant transition-colors hover:text-primary"
+                  className="text-sm font-medium text-on-surface-variant transition-colors hover:text-primary"
                 >
-                    {link.label}
+                  {link.label}
                 </Link>
-                );
+              );
             })}
           </div>
         </div>
@@ -120,10 +125,13 @@ export async function Navbar() {
             </details>
           </div>
         ) : (
-            <Link href="/login" className="rounded-full bg-primary px-6 py-2 text-sm font-bold text-on-primary shadow-[inset_0_0_0_1px_rgb(255_255_255/0.1),0_8px_32px_rgb(26_28_24/0.05)] transition-all hover:opacity-90 active:scale-95">
-              Sign In
-            </Link>
-        )}        
+          <Link
+            href="/login"
+            className="rounded-full bg-primary px-6 py-2 text-sm font-bold text-on-primary shadow-[inset_0_0_0_1px_rgb(255_255_255/0.1),0_8px_32px_rgb(26_28_24/0.05)] transition-all hover:opacity-90 active:scale-95"
+          >
+            Sign In
+          </Link>
+        )}
       </div>
     </nav>
   );

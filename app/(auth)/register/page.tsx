@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { apiBaseUrl } from "@/lib/config";
 
-export default function RegisterPage() {
+function RegisterPageContent() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const callbackUrl = searchParams.get("callbackUrl") ?? "/";
@@ -241,5 +241,13 @@ export default function RegisterPage() {
 				<div className="absolute inset-0 z-10 bg-linear-to-t from-primary/60 via-transparent to-transparent" />
 			</section>
 		</main>
+	);
+}
+
+export default function RegisterPage() {
+	return (
+		<Suspense fallback={<main className="min-h-screen bg-surface" />}>
+			<RegisterPageContent />
+		</Suspense>
 	);
 }

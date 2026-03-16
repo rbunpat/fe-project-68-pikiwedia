@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useEffect, useState } from "react";
+import { Suspense, useMemo, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { MassageShop, MassagesResponse } from "@/interface";
 import { apiBaseUrl } from "@/lib/config";
 
-export default function SearchResultPage() {
+function SearchResultContent() {
   const searchParams = useSearchParams();
   const query = (searchParams.get("q") ?? "").trim();
 
@@ -147,5 +147,21 @@ export default function SearchResultPage() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function SearchResultPage() {
+  return (
+    <Suspense
+      fallback={
+        <section className="bg-surface px-6 py-20 lg:px-20">
+          <div className="mx-auto max-w-7xl text-on-surface-variant">
+            Loading search results...
+          </div>
+        </section>
+      }
+    >
+      <SearchResultContent />
+    </Suspense>
   );
 }
