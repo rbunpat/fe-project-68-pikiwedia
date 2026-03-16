@@ -13,11 +13,8 @@ export async function Navbar() {
   const session = await getServerSession(authOptions);
   let profile = null;
 
-  console.log(session);
-
   if (session) {
     profile = await getUserProfile(session.user.token);
-    console.log(profile);
   }
 
   return (
@@ -103,18 +100,6 @@ export async function Navbar() {
                 />
               </summary>
               <div className="invisible absolute right-0 mt-2 w-48 overflow-hidden rounded-xl bg-surface-container-lowest py-2 opacity-0 shadow-[0_8px_32px_rgb(26_28_24/0.08)] transition-all duration-200 group-open:visible group-open:opacity-100">
-                {/* <Link
-                  href="/profile"
-                  className="block px-4 py-2 text-sm text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-primary"
-                >
-                  Profile
-                </Link> */}
-                {/* <Link
-                  href="/my-bookings"
-                  className="block px-4 py-2 text-sm text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-primary"
-                >
-                  My Bookings
-                </Link> */}
                 <Link
                   href="/logout"
                   className="block px-4 py-2 text-sm text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-primary"
