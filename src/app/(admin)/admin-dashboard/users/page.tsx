@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { getAdminUsers, registerAdminUser } from "@/src/lib/admin/adminApi";
+import formatPhoneNumber from "@/src/lib/admin/formatPhoneNumber";
 import getAdminTokenOrThrow from "@/src/lib/admin/getAdminTokenOrThrow";
 import getUserProfile from "@/src/lib/auth/getUserProfile";
 
@@ -94,7 +95,7 @@ export default async function UserManagementPage({
       name: String(formData.get("name") ?? "").trim(),
       email: String(formData.get("email") ?? "").trim(),
       password: String(formData.get("password") ?? "").trim(),
-      tel: String(formData.get("tel") ?? "").trim(),
+      tel: formatPhoneNumber(String(formData.get("tel") ?? "").trim()),
     });
 
     revalidatePath("/admin-dashboard/users");
