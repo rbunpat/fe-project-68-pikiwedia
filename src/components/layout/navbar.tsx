@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/authOptions";
-import getUserProfile from "@/src/lib/auth/getUserProfile";
+import getSessionAuthContext from "@/src/lib/auth/getSessionAuthContext";
 
 const navLinks = [
   { href: "/", label: "Home", authRequired: false, adminOnly: false },
@@ -11,14 +9,7 @@ const navLinks = [
 ];
 
 export async function Navbar() {
-  const session = await getServerSession(authOptions);
-  let profile = null;
-  let isAdmin = false;
-
-  if (session) {
-    profile = await getUserProfile(session.user.token);
-    isAdmin = profile.data.role === "admin";
-  }
+  const { session, profile, isAdmin } = await getSessionAuthContext();
 
   return (
     <nav className="glass-nav sticky top-0 z-50 px-6 py-4 lg:px-20">

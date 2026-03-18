@@ -21,20 +21,6 @@ function readSearchParam(params: SearchParams, key: string) {
   return (value ?? "").trim();
 }
 
-function getInitials(name: string) {
-  const parts = name
-    .split(" ")
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .slice(0, 2);
-
-  if (parts.length === 0) {
-    return "--";
-  }
-
-  return parts.map((part) => part[0]?.toUpperCase() ?? "").join("");
-}
-
 function getRoleBadge(role: string) {
   if (role.toLowerCase() === "admin") {
     return {
@@ -236,7 +222,6 @@ export default async function UserManagementPage({
               className="group flex flex-col gap-6 rounded-4xl border border-outline-variant/5 bg-surface-container-lowest p-6 shadow-sm transition-shadow hover:shadow-md xl:flex-row xl:items-center xl:gap-10"
             >
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary-fixed text-xl font-bold text-primary">
-                {/* {getInitials(user.name)} */}
                 	<img
 									src={`https://img.rachatat.com/insecure/plain/https://api.dicebear.com/9.x/lorelei/svg%3Fseed=${user._id}`}
 									alt="User avatar"
