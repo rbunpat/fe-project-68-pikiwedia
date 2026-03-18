@@ -217,12 +217,6 @@ function RegisterPageContent() {
 								Sign In
 							</Link>
 						</p>
-
-						{/* <footer className="mt-20 border-t border-surface-container pt-8">
-							<p className="mt-4 text-[10px] uppercase tracking-widest text-outline-variant">
-								© 2026 ZenMassage by Pikiwedia
-							</p>
-						</footer> */}
 					</div>
 				</div>
 			</section>

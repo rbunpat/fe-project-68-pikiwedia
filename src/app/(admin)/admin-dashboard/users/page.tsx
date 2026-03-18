@@ -2,8 +2,8 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { getAdminUsers, registerAdminUser } from "@/src/lib/admin/adminApi";
 import formatPhoneNumber from "@/src/lib/admin/formatPhoneNumber";
-import getAdminTokenOrThrow from "@/src/lib/admin/getAdminTokenOrThrow";
 import getUserProfile from "@/src/lib/auth/getUserProfile";
+import requireAdminAuth from "@/src/lib/admin/requireAdminAuth";
 import CreateAdminUserModal from "./_components/createAdminUserModal";
 
 type SearchParams = Record<string, string | string[] | undefined>;
@@ -19,20 +19,6 @@ function readSearchParam(params: SearchParams, key: string) {
   }
 
   return (value ?? "").trim();
-}
-
-function getInitials(name: string) {
-  const parts = name
-    .split(" ")
-    .map((part) => part.trim())
-    .filter(Boolean)
-    .slice(0, 2);
-
-  if (parts.length === 0) {
-    return "--";
-  }
-
-  return parts.map((part) => part[0]?.toUpperCase() ?? "").join("");
 }
 
 function getRoleBadge(role: string) {
@@ -76,18 +62,15 @@ export default async function UserManagementPage({
   const keywordFilter = readSearchParam(resolvedSearchParams, "keyword");
   const sortBy = readSearchParam(resolvedSearchParams, "sort") || "created-desc";
 
-  const token = await getAdminTokenOrThrow();
+  const { session, profile } = await requireAdminAuth();
+  const token = session?.user?.token as string;
+
   const usersResponse = await getAdminUsers(token).catch(() => ({
     success: false,
     count: 0,
     totalCount: 0,
     pagination: undefined,
     data: [],
-  }));
-
-  const profile = await getUserProfile(token).catch(() => ({
-    success: false,
-    data: null,
   }));
 
   async function createAdminAction(
@@ -97,7 +80,8 @@ export default async function UserManagementPage({
     "use server";
 
     try {
-      const actionToken = await getAdminTokenOrThrow();
+      const { session: actionSession } = await requireAdminAuth();
+      const actionToken = actionSession?.user?.token as string;
 
       await registerAdminUser(actionToken, {
         name: String(formData.get("name") ?? "").trim(),
@@ -236,7 +220,6 @@ export default async function UserManagementPage({
               className="group flex flex-col gap-6 rounded-4xl border border-outline-variant/5 bg-surface-container-lowest p-6 shadow-sm transition-shadow hover:shadow-md xl:flex-row xl:items-center xl:gap-10"
             >
               <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary-fixed text-xl font-bold text-primary">
-                {/* {getInitials(user.name)} */}
                 	<img
 									src={`https://img.rachatat.com/insecure/plain/https://api.dicebear.com/9.x/lorelei/svg%3Fseed=${user._id}`}
 									alt="User avatar"

@@ -1,10 +1,11 @@
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { deleteAdminShop, getAdminShops } from "@/src/lib/admin/adminApi";
-import getAdminTokenOrThrow from "@/src/lib/admin/getAdminTokenOrThrow";
+import requireAdminAuth from "@/src/lib/admin/requireAdminAuth";
 
 export default async function ManageShopsPage() {
-  const token = await getAdminTokenOrThrow();
+  const { session } = await requireAdminAuth();
+  const token = session?.user?.token as string;
   const shopsResponse = await getAdminShops(token).catch(() => ({
     success: false,
     count: 0,
@@ -14,7 +15,8 @@ export default async function ManageShopsPage() {
   async function deleteShopAction(formData: FormData) {
     "use server";
 
-    const actionToken = await getAdminTokenOrThrow();
+    const { session: actionSession } = await requireAdminAuth();
+    const actionToken = actionSession?.user?.token as string;
     const shopId = String(formData.get("shopId") ?? "").trim();
 
     if (!shopId) {

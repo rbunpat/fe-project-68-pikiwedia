@@ -1,9 +1,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/authOptions";
-import getUserProfile from "@/src/lib/auth/getUserProfile";
+import { redirect, notFound, unauthorized, forbidden } from "next/navigation";
+import getSessionAuthContext from "@/src/lib/auth/getSessionAuthContext";
 import AdminNav from "./_components/adminNav";
 
 export default async function AdminLayout({
@@ -11,29 +9,22 @@ export default async function AdminLayout({
 }: Readonly<{
 	children: ReactNode;
 }>) {
-	const session = await getServerSession(authOptions);
-	let profile = null;
-	let isAdmin = false;
-
-	if (session) {
-		profile = await getUserProfile(session.user.token);
-		isAdmin = profile.data.role === "admin";
-	}
+	const { session, profile, isAdmin } = await getSessionAuthContext();
 
 	if (!session?.user) {
 		redirect("/login?callbackUrl=/admin-dashboard");
+	} else if (!isAdmin) {
+		// redirect("/");
+		// unauthorized();
+		forbidden();
 	}
-
-	if (!isAdmin) {
-		redirect("/");
-	}
-
+	
 	return (
 		<div className="bg-background text-on-surface flex min-h-screen flex-col lg:flex-row">
 			<aside className="bg-surface-container hidden w-72 shrink-0 flex-col border-r border-outline-variant/10 lg:sticky lg:top-0 lg:flex lg:h-screen lg:overflow-y-auto">
 				<div className="p-8">
 					<h1 className="font-headline text-primary text-2xl font-bold">
-						ZenSpa Admin
+						ZenMassage Admin
 					</h1>
 					<p className="text-on-surface-variant mt-1 text-xs tracking-widest">
 						Verdant Sanctuary System
@@ -68,14 +59,14 @@ export default async function AdminLayout({
 								{/* User Name and role */}
 								<div className="mr-2 ml-2 flex-col text-right sm:block">
 									<p className="text-sm font-medium text-on-surface">
-										{profile.data.name}
+										{profile?.data?.name ?? "Admin"}
 									</p>
 									<p className="text-xs text-on-surface-variant">
-										{profile.data.role}
+										{profile?.data?.role ?? "admin"}
 									</p>
 								</div>
 								<img
-									src={`https://img.rachatat.com/insecure/plain/https://api.dicebear.com/9.x/lorelei/svg%3Fseed=${profile.data._id}`}
+									src={`https://img.rachatat.com/insecure/plain/https://api.dicebear.com/9.x/lorelei/svg%3Fseed=${profile?.data?._id ?? "admin"}`}
 									alt="User avatar"
 									className="h-10 w-10 rounded-full object-cover"
 								/>

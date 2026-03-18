@@ -51,12 +51,6 @@ export default function LogoutPage() {
                   <div className="absolute inset-0 bg-white opacity-0 transition-opacity group-hover:opacity-10" />
                 </button>
             </div>
-
-            {/* <footer className="mt-20 border-t border-surface-container pt-8">
-              <p className="mt-4 text-[10px] uppercase tracking-widest text-outline-variant">
-                © 2026 ZenMassage by Pikiwedia
-              </p>
-            </footer> */}
           </div>
         </section>
 

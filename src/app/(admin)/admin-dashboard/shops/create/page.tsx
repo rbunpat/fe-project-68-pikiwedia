@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createAdminShop } from "@/src/lib/admin/adminApi";
-import getAdminTokenOrThrow from "@/src/lib/admin/getAdminTokenOrThrow";
+import requireAdminAuth from "@/src/lib/admin/requireAdminAuth";
 import CreateShopForm from "./_components/createShopForm";
 
 type CreateShopActionState = {
@@ -10,6 +10,8 @@ type CreateShopActionState = {
 };
 
 export default async function CreateShopPage() {
+  await requireAdminAuth();
+
   async function createShopAction(
     _prevState: CreateShopActionState,
     formData: FormData,
@@ -17,7 +19,8 @@ export default async function CreateShopPage() {
     "use server";
 
     try {
-      const actionToken = await getAdminTokenOrThrow();
+      const { session: actionSession } = await requireAdminAuth();
+      const actionToken = actionSession?.user?.token as string;
       const pictures = formData
         .getAll("pictures")
         .map((value) => String(value).trim())

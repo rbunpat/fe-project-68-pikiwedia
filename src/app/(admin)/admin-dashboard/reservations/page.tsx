@@ -5,7 +5,7 @@ import {
 	getAdminReservations,
 	updateAdminReservationDate,
 } from "@/src/lib/admin/adminApi";
-import getAdminTokenOrThrow from "@/src/lib/admin/getAdminTokenOrThrow";
+import requireAdminAuth from "@/src/lib/admin/requireAdminAuth";
 
 function toDatetimeLocal(value: string) {
 	const date = new Date(value);
@@ -41,20 +41,6 @@ function getMassageMeta(value: string | { name?: string; province?: string; tel?
 		province: value.province ?? "-",
 		tel: value.tel ?? "-",
 	};
-}
-
-function getInitials(name: string) {
-	const parts = name
-		.split(" ")
-		.map((part) => part.trim())
-		.filter(Boolean)
-		.slice(0, 2);
-
-	if (parts.length === 0) {
-		return "--";
-	}
-
-	return parts.map((part) => part[0]?.toUpperCase() ?? "").join("");
 }
 
 function getStatus(reserveDate: string, isRated?: boolean) {
@@ -115,7 +101,8 @@ export default async function ManageReservationsPage({
 	const dateFilter = readSearchParam(resolvedSearchParams, "date");
 	const sortBy = readSearchParam(resolvedSearchParams, "sort") || "date-desc";
 
-	const token = await getAdminTokenOrThrow();
+	const { session } = await requireAdminAuth();
+	const token = session?.user?.token as string;
 	const reservationsResponse = await getAdminReservations(token).catch(() => ({
 		success: false,
 		count: 0,
@@ -187,7 +174,8 @@ export default async function ManageReservationsPage({
 	async function updateReservationAction(formData: FormData) {
 		"use server";
 
-		const actionToken = await getAdminTokenOrThrow();
+		const { session: actionSession } = await requireAdminAuth();
+		const actionToken = actionSession?.user?.token as string;
 		const reservationId = String(formData.get("reservationId") ?? "").trim();
 		const reserveDate = String(formData.get("reserveDate") ?? "").trim();
 
@@ -206,7 +194,8 @@ export default async function ManageReservationsPage({
 	async function deleteReservationAction(formData: FormData) {
 		"use server";
 
-		const actionToken = await getAdminTokenOrThrow();
+		const { session: actionSession } = await requireAdminAuth();
+		const actionToken = actionSession?.user?.token as string;
 		const reservationId = String(formData.get("reservationId") ?? "").trim();
 
 		if (!reservationId) {

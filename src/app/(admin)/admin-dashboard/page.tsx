@@ -1,25 +1,21 @@
 import getCurrentGreeting from "@/src/lib/getCurrentGreeting";
-import { getServerSession } from "next-auth";
-import getUserProfile from "@/src/lib/auth/getUserProfile";
-import { authOptions } from "../../api/auth/[...nextauth]/authOptions";
-
 import getShopsCount from "@/src/lib/admin/getShopsCount";
 import getReservationsCount from "@/src/lib/admin/getReservationsCount";
 import Link from "next/link";
 import getUsersCount from "@/src/lib/admin/getUsersCount";
+import requireAdminAuth from "@/src/lib/admin/requireAdminAuth";
 
 export default async function AdminDashboardPage() {
-  const session = await getServerSession(authOptions);
-  let profile = null;
+  const { session, profile } = await requireAdminAuth();
+  const token = session?.user?.token;
   let shopsCount = 0;
   let reservationsCount = 0;
   let usersCount = 0;
 
-  if (session) {
-    profile = await getUserProfile(session.user.token);
-    shopsCount = await getShopsCount(session.user.token);
-    reservationsCount = await getReservationsCount(session.user.token);
-    usersCount = await getUsersCount(session.user.token);
+  if (token) {
+    shopsCount = await getShopsCount(token);
+    reservationsCount = await getReservationsCount(token);
+    usersCount = await getUsersCount(token);
   }
 
   return (
