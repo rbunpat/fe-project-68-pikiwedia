@@ -2,8 +2,8 @@ import { revalidatePath } from "next/cache";
 import Link from "next/link";
 import { getAdminUsers, registerAdminUser } from "@/src/lib/admin/adminApi";
 import formatPhoneNumber from "@/src/lib/admin/formatPhoneNumber";
-import getAdminTokenOrThrow from "@/src/lib/admin/getAdminTokenOrThrow";
 import getUserProfile from "@/src/lib/auth/getUserProfile";
+import requireAdminAuth from "@/src/lib/admin/requireAdminAuth";
 import CreateAdminUserModal from "./_components/createAdminUserModal";
 
 type SearchParams = Record<string, string | string[] | undefined>;
@@ -62,18 +62,15 @@ export default async function UserManagementPage({
   const keywordFilter = readSearchParam(resolvedSearchParams, "keyword");
   const sortBy = readSearchParam(resolvedSearchParams, "sort") || "created-desc";
 
-  const token = await getAdminTokenOrThrow();
+  const { session, profile } = await requireAdminAuth();
+  const token = session?.user?.token as string;
+
   const usersResponse = await getAdminUsers(token).catch(() => ({
     success: false,
     count: 0,
     totalCount: 0,
     pagination: undefined,
     data: [],
-  }));
-
-  const profile = await getUserProfile(token).catch(() => ({
-    success: false,
-    data: null,
   }));
 
   async function createAdminAction(
@@ -83,7 +80,8 @@ export default async function UserManagementPage({
     "use server";
 
     try {
-      const actionToken = await getAdminTokenOrThrow();
+      const { session: actionSession } = await requireAdminAuth();
+      const actionToken = actionSession?.user?.token as string;
 
       await registerAdminUser(actionToken, {
         name: String(formData.get("name") ?? "").trim(),

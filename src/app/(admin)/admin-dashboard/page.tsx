@@ -1,13 +1,13 @@
 import getCurrentGreeting from "@/src/lib/getCurrentGreeting";
-import getSessionAuthContext from "@/src/lib/auth/getSessionAuthContext";
-
 import getShopsCount from "@/src/lib/admin/getShopsCount";
 import getReservationsCount from "@/src/lib/admin/getReservationsCount";
 import Link from "next/link";
 import getUsersCount from "@/src/lib/admin/getUsersCount";
+import requireAdminAuth from "@/src/lib/admin/requireAdminAuth";
 
 export default async function AdminDashboardPage() {
-  const { token, profile } = await getSessionAuthContext();
+  const { session, profile } = await requireAdminAuth();
+  const token = session?.user?.token;
   let shopsCount = 0;
   let reservationsCount = 0;
   let usersCount = 0;

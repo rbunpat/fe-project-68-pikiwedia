@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { redirect, notFound, unauthorized, forbidden } from "next/navigation";
 import getSessionAuthContext from "@/src/lib/auth/getSessionAuthContext";
 import AdminNav from "./_components/adminNav";
 
@@ -13,12 +13,12 @@ export default async function AdminLayout({
 
 	if (!session?.user) {
 		redirect("/login?callbackUrl=/admin-dashboard");
+	} else if (!isAdmin) {
+		// redirect("/");
+		// unauthorized();
+		forbidden();
 	}
-
-	if (!isAdmin) {
-		redirect("/");
-	}
-
+	
 	return (
 		<div className="bg-background text-on-surface flex min-h-screen flex-col lg:flex-row">
 			<aside className="bg-surface-container hidden w-72 shrink-0 flex-col border-r border-outline-variant/10 lg:sticky lg:top-0 lg:flex lg:h-screen lg:overflow-y-auto">

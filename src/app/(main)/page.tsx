@@ -28,8 +28,30 @@ async function getMainPageShops() {
   }
 }
 
-export default async function Home() {
-  const { shops, loadError } = await getMainPageShops();
+type SearchParams = Record<string, string | string[] | undefined>;
 
-  return <HomePageClient shops={shops} loadError={loadError} />;
+function getErrorMessage(params: SearchParams): string | null {
+  const error = params.error;
+  if (typeof error === "string") {
+    return decodeURIComponent(error);
+  }
+  if (Array.isArray(error)) {
+    return decodeURIComponent(error[0] ?? "");
+  }
+  return null;
+}
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams?: SearchParams | Promise<SearchParams>;
+}) {
+  const resolvedSearchParams =
+    searchParams instanceof Promise ? await searchParams : (searchParams ?? {});
+  
+  const { shops, loadError } = await getMainPageShops();
+  const authError = getErrorMessage(resolvedSearchParams);
+  const displayError = authError || loadError;
+
+  return <HomePageClient shops={shops} loadError={displayError} />;
 }

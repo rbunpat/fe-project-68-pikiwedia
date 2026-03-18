@@ -5,7 +5,7 @@ import {
   getAdminShopById,
   updateAdminShop,
 } from "@/src/lib/admin/adminApi";
-import getAdminTokenOrThrow from "@/src/lib/admin/getAdminTokenOrThrow";
+import requireAdminAuth from "@/src/lib/admin/requireAdminAuth";
 import EditShopForm from "./_components/editShopForm";
 
 type ShopActionState = {
@@ -21,7 +21,8 @@ type EditShopPageProps = {
 
 export default async function EditShopPage({ params }: EditShopPageProps) {
   const { shopId } = await params;
-  const token = await getAdminTokenOrThrow();
+  const { session } = await requireAdminAuth();
+  const token = session?.user?.token as string;
   const shopResponse = await getAdminShopById(token, shopId).catch(() => null);
 
   if (!shopResponse?.data) {
@@ -35,7 +36,8 @@ export default async function EditShopPage({ params }: EditShopPageProps) {
     "use server";
 
     try {
-      const actionToken = await getAdminTokenOrThrow();
+      const { session: actionSession } = await requireAdminAuth();
+      const actionToken = actionSession?.user?.token as string;
       const pictures = formData
         .getAll("pictures")
         .map((value) => String(value).trim())
@@ -77,7 +79,8 @@ export default async function EditShopPage({ params }: EditShopPageProps) {
     void _formData;
 
     try {
-      const actionToken = await getAdminTokenOrThrow();
+      const { session: actionSession } = await requireAdminAuth();
+      const actionToken = actionSession?.user?.token as string;
       await deleteAdminShop(actionToken, shopId);
     } catch (error) {
       const message =
