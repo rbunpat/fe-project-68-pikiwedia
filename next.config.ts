@@ -22,6 +22,21 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "img.rachatat.com",
         pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "img.rachatat.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "fe-storage.rachatat.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "fe-storage.rachatat.com",
+        pathname: "/**",
       }
     ],
   },
