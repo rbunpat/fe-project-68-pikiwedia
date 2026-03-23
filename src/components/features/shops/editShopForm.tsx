@@ -79,7 +79,7 @@ export default function EditShopForm({
 
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/admin-dashboard/shops"
+              href="/admin/shops"
               className="rounded-full border border-outline-variant/40 px-6 py-3 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-low"
             >
               Discard Changes
@@ -332,7 +332,7 @@ export default function EditShopForm({
 
         <div className="flex justify-end gap-3 border-t border-outline-variant/10 pt-6">
           <Link
-            href="/admin-dashboard/shops"
+            href="/admin/shops"
             className="rounded-full border border-outline-variant/40 px-6 py-3 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-low"
           >
             Back to Shops
@@ -342,7 +342,7 @@ export default function EditShopForm({
             disabled={isUpdatePending}
             className="rounded-full bg-primary px-8 py-3 text-sm font-semibold text-on-primary transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isUpdatePending ? "Saving..." : `Save ${formatCurrency(shop.price)} THB Profile`}
+            {isUpdatePending ? "Saving..." : `Save Changes`}
           </button>
         </div>
       </form>
