@@ -1,6 +1,6 @@
-import { MassagesResponse } from "@/interface";
+import { MassagesResponse } from "@/src/types/interface";
 import { apiBaseUrl } from "@/src/lib/config";
-import { HomePageClient } from "./_components/homePageClient";
+import { HomePageClient } from "@/src/components/pages/homePageClient";
 
 export const revalidate = 60;
 
@@ -48,7 +48,7 @@ export default async function Home({
 }) {
   const resolvedSearchParams =
     searchParams instanceof Promise ? await searchParams : (searchParams ?? {});
-  
+
   const { shops, loadError } = await getMainPageShops();
   const authError = getErrorMessage(resolvedSearchParams);
   const displayError = authError || loadError;
